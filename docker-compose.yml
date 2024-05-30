@@ -1,13 +1,13 @@
 version: "3"
 services:
 
-  sadoparser_bot:
+  generator_bot:
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - sadoparserai_db
-    container_name: sadoparser_bot
+      - generator_db
+    container_name: generator_bot
     ports:
       - "1283:8000"
     volumes:
@@ -17,9 +17,9 @@ services:
     networks:
       - project-network
       
-  sadoparserai_db:
+  generator_db:
     image: postgres:latest
-    container_name: sadoparserai_db
+    container_name: generator_db
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASS}
