@@ -251,6 +251,6 @@ $RECYCLE.BIN/
 
 media/*
 !media/extras
-
+!media/banner.webp
 
 har_and_cookies
