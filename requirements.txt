@@ -1,0 +1,11 @@
+requests
+loguru
+apscheduler
+aiogram
+python-dotenv
+fastapi
+alembic
+psycopg2-binary
+pillow
+g4f
+nest_asyncio
