@@ -9,3 +9,5 @@ psycopg2-binary
 pillow
 g4f
 nest_asyncio
+pandas
+openpyxl

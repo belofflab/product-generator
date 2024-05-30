@@ -7,4 +7,4 @@ build:
 	docker exec -it sadoparser_bot alembic upgrade head
 
 upgrade:
-	docker exec -it sadoparser_bot alembic upgrade head
+	docker exec -it generator_bot alembic upgrade head
