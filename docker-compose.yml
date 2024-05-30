@@ -9,7 +9,7 @@ services:
       - generator_db
     container_name: generator_bot
     ports:
-      - "1283:8000"
+      - "1383:8000"
     volumes:
       - ./media:/app/media
     environment:
