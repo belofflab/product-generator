@@ -9,10 +9,39 @@ from config.settings import MEDIA_DIR
 from loguru import logger
 
 class WB:
-    def __init__(self, user_card: UserCard) -> None:
+    def __init__(self, user_card: Optional[UserCard] = None) -> None:
         self.http_client = BaseSession(max_retries=5)
         self.user_card = user_card
     
+    async def get_similar_queries(self, query: str):
+        headers = {
+            'accept': '*/*',
+            'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+            'origin': 'https://www.wildberries.ru',
+            'priority': 'u=1, i',
+            'referer': 'https://www.wildberries.ru/catalog/0/search.aspx?search=%D1%81%D1%83%D0%BC%D0%BA%D0%B0%20%D0%B6%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%20%D1%88%D0%BE%D0%BF%D0%BF%D0%B5%D1%80',
+            'sec-ch-ua': '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"macOS"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+            'x-queryid': 'qid469165812171597696620240530125324',
+        }
+
+        params = {
+            'query': query,
+            'lang': 'ru',
+            'appType': '1',
+            'curr': 'rub',
+            'dest': '-1257786',
+            'spp': '30',
+            'locale': 'ru',
+            'ab_testing': 'false',
+        }
+        return await self.http_client._make_request(method="GET", url='https://similar-queries.wildberries.ru/api/v2/search/query', response_type="json", params=params, headers=headers)
+
     async def get_product_path(self, nm_id: int, subject: str, brand: str) -> dict:
         headers = {
             'accept': '*/*',

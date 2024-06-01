@@ -46,12 +46,6 @@ class Generator:
         except ProductsGetFailed as ex:
             raise CardGenFailed(ex, self.new_card.id)
 
-        # try:
-        #     MPStats().make_report(product_name=product['name'], key_words=...)
-        # except Exception as e:
-        #     logger.error(f"Failed to make report: {e}")
-        #     raise CardGenFailed("не смогли сгенерировать SEO описание",card_id)
-
         Saver(self.user_id).make_report(self.new_card.id)
 
         return self.new_card

@@ -27,4 +27,23 @@ async def main():
     print(result)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    # asyncio.run(main())
+    import re
+
+    pattern = re.compile(r'(\d*\.?\d+)\s*x\s*(\d*\.?\d+)\s*x\s*(\d*\.?\d+)')
+
+    # Examples to test
+    test_strings = [
+        "3 x 4 x 5",
+        "3.5 x 4.2 x 5.1",
+        "3 x 4.2 x 5",
+        "3.5 x 4 x 5.1",
+    ]
+
+    for s in test_strings:
+        match = pattern.match(s)
+        if match:
+            print(f"Matched: {s} -> {match.groups()}")
+        else:
+            print(f"No match: {s}")
+

@@ -2,7 +2,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 
 from loader import bot
-from aiogram.types import InputMediaDocument, FSInputFile
+from aiogram.types import FSInputFile
 from apps.generator_base.modules.cards.saver import Saver
 from apps.generator_base.modules.cards import Generator
 from apps.generator_base.modules.cards.exceptions import CardGenFailed
@@ -27,17 +27,17 @@ async def get_report_task(chat_id: int, message_id: str):
 
 
 async def generate_card_task(chat_id: int, file_id: str, message_id: str):
-        new_message = await bot.send_photo(chat_id=chat_id, photo=file_id, caption="<b>Новая задача на генерацию карточки!</b>\n\nВремя ожидания: 5-6 минут.\n\n<i>Описание под данным фото будет изменено после генерации карточки.</i>")
+        new_message = await bot.send_photo(chat_id=chat_id, photo=file_id, caption="<b>Новая задача на генерацию карточки!</b>\n\nВремя ожидания: 5-6 минут.")
         try:
             card = await Generator(chat_id).make_card(file_id)
             await bot.delete_message(chat_id, message_id)
-            await new_message.edit_caption(caption=f"""
-<b>Добавлена новая карточка!</b>
-                                    
+            await new_message.edit_caption(caption="<b>Добавлена новая карточка!</b>\n\n<i>Разработано: @belofflab</i>")
+            await bot.send_message(chat_id=chat_id, text=f"""                                    
 <b>Наименование: </b> <code>{card.name}</code>
+
 <b>Описание: </b> <code>{card.description}</code>
 
-<i>Разработано: @belofflab</i>
+<b>Примерные размеры (не входят в подробный отчёт): {card.size} </b>
 """)
         except CardGenFailed as error:
             await new_message.edit_caption(caption=f"Ошибка: {error}. Пожалуйста, попробуйте позже!")
