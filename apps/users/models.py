@@ -1,22 +1,19 @@
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import (
     Column,
     String,
     DateTime,
-    func,
     BigInteger,
     Integer,
     Boolean,
     Unicode,
     Float,
-    ForeignKey,
     LargeBinary,
     Numeric,
+    func
 )
 from decimal import Decimal
 from config.database import FastModel
-from uuid import uuid4
-from sqlalchemy.orm import relationship
+
 
 
 class APSchedulerJob(FastModel):
@@ -34,6 +31,7 @@ class User(FastModel):
     full_name: str = Column(String(1024), nullable=False, index=True)
     username: str = Column(String(255), nullable=True, index=True)
     balance: Decimal = Column(Numeric(12,2), nullable=False, default=0)
+    gen_qnt: int = Column(Integer, nullable=True, default=1)
     
     is_active = Column(Boolean, nullable=False, default=True)
     is_subscribed = Column(Boolean, nullable=False, default=False)

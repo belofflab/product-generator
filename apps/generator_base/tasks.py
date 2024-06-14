@@ -30,14 +30,14 @@ async def generate_card_task(chat_id: int, file_id: str, message_id: str):
         new_message = await bot.send_photo(chat_id=chat_id, photo=file_id, caption="<b>Новая задача на генерацию карточки!</b>\n\nВремя ожидания: 5-6 минут.")
         try:
             card = await Generator(chat_id).make_card(file_id)
-            await bot.delete_message(chat_id, message_id)
+            # await bot.delete_message(chat_id, message_id)
             await new_message.edit_caption(caption="<b>Добавлена новая карточка!</b>\n\n<i>Разработано: @belofflab</i>")
             await bot.send_message(chat_id=chat_id, text=f"""                                    
-<b>Наименование: </b> <code>{card.name}</code>
+<b>Наименование:</b> <code>{card.name}</code>
 
-<b>Описание: </b> <code>{card.description}</code>
+<b>Описание:</b> <code>{card.description}</code>
 
-<b>Примерные размеры (не входят в подробный отчёт): {card.size} </b>
+<b>Примерные размеры (не входят в подробный отчёт):</b> <code>{card.size}</code>
 """)
         except CardGenFailed as error:
             await new_message.edit_caption(caption=f"Ошибка: {error}. Пожалуйста, попробуйте позже!")

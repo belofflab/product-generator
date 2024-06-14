@@ -122,7 +122,7 @@ MEDIA_DIR.mkdir(parents=True, exist_ok=True)
 MAX_FILE_SIZE = 50
 
 MAX_WORKERS = 40
-MAX_USER_TASKS = 5
+MAX_USER_TASKS = 1
 # int number as currency RUB 
 PRICE_PER_CARD = 50
 

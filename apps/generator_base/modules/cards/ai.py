@@ -64,11 +64,15 @@ class AI:
             except RateLimitError as ex:
                 logger.error(f"RateLimitError: {ex}")
                 await asyncio.sleep(90)
-            except (ResponseStatusError, GPTWrapResponseFailed) as ex:
-                logger.error(f"Error: {ex}")
+            except ResponseStatusError as ex:
+                logger.error(f"Ошибка: {ex}")
                 await asyncio.sleep(10)
+            except GPTWrapResponseFailed as ex:
+                logger.error(f"Ошибка {ex}")
+                await asyncio.sleep(25)
             except Exception as error:
                 logger.error(f"Неизвестная ошибка: {error}")
+                await asyncio.sleep(5)
             await asyncio.sleep(timeout_delay)
             if attempt >= max_attempts:
                 raise GPTAccessFailed("Не удалось получить доступ к интеллекту")
@@ -91,10 +95,9 @@ class AI:
                 if is_success:
                     dictionary.pop('is_success', None)
                     return dictionary
-        except Exception as error_msg:
-            logger.error(f"При обработке карточки возникла ошиюка: {error_msg}")
-        
-        raise GPTWrapResponseFailed("Произошла ошибка обработки карточки.")
+        except Exception:
+            pass 
+        raise GPTWrapResponseFailed("не смогли обработать карточку.")
     
     async def generate_card(self, image_content: bytes) -> dict:
         # prompt: str = """Identify the item in the photo (this thing can be put on a person), write best selling descriptions (on russian language) of the item in the photo for marketplace, write the average size of the item in the photo in a given format without too much explanation. Size format: height x length x width (without letters only integer). Give me JSON object with values. Don't text me any other information besides the JSON object For Example {"name":"full item name (must be < 60 chars, must describe the item in the picture in detail for the seo and contain perhaps a make, model, color or material).", "description": "item description with selling SEO (use keywords similar to this one) (min 1500 characters, max 2000 characters)", "size": "height x width x length in centimeter" ,"is_success": "1 if success else 0"}"""
@@ -120,4 +123,3 @@ class AI:
         card["description"] = description
 
         return card
-    

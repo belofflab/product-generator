@@ -3,8 +3,10 @@ from sqlalchemy import select, update
 from apps.users.models import User
 from config.database import DatabaseManager
 from sqlalchemy.sql import exists
+from sqlalchemy import and_
 from apps.core.date_time import DateTime
 from config.settings import MAX_USER_TASKS
+
 # from loader import analytics
 
 
@@ -23,6 +25,30 @@ class UserService:
             result = session.query(exists().where(User.id == user_id)).scalar()
         return result
     
+    @classmethod
+    def has_free_access(cls, user_id: int) -> bool:
+        with DatabaseManager.session as session:
+            has_access = session.query(exists().where(and_(User.id == user_id, User.gen_qnt < MAX_USER_TASKS))).scalar()
+        return has_access
+    
+    @classmethod
+    def inc_gen(cls, user_id: int, value: int = 1) -> None:
+        with DatabaseManager.session as session:
+            session.query(User).filter(User.id == user_id).update({User.gen_qnt: User.gen_qnt + value})
+            session.commit()
+
+    @classmethod
+    def dec_gen(cls, user_id: int, value: int = 1) -> None:
+        with DatabaseManager.session as session:
+            session.query(User).filter(User.id == user_id).update({User.gen_qnt: User.gen_qnt - value})
+            session.commit()
+
+    @classmethod
+    def reset_gen(cls, user_id: int, value: int = 0) -> None:
+        with DatabaseManager.session as session:
+            session.query(User).filter(User.id == user_id).update({User.gen_qnt: value})
+            session.commit()
+
     @classmethod
     def _create_or_update_user(cls, **data):
         user_id = data.pop("id")

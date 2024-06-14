@@ -7,7 +7,6 @@ from apps.generator_base.models import UserCard
 from apps.generator_base.modules.sessions import BaseSession
 from apps.generator_base.modules.cards.ai import AI
 from apps.generator_base.modules.cards.wb import WB
-from apps.generator_base.modules.cards.mpstats import MPStats
 from apps.generator_base.modules.cards.saver import Saver
 from apps.generator_base.modules.cards.exceptions import CardGenFailed, GPTAccessFailed, ProductsGetFailed
 
