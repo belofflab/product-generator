@@ -1,6 +1,5 @@
-import asyncio
 from sqlalchemy import select, update
-from apps.users.models import User
+from apps.users.models import User, Transaction
 from config.database import DatabaseManager
 from sqlalchemy.sql import exists
 from sqlalchemy import and_
@@ -9,6 +8,37 @@ from config.settings import MAX_USER_TASKS
 
 # from loader import analytics
 
+
+
+class TransactionService:
+    transaction = None
+
+    @classmethod
+    def create_transaction(cls, data: dict):
+        cls._create_transaction(data)
+
+        return cls.retrieve_transaction(cls.transaction.id)
+    
+    @classmethod
+    def _create_transaction(cls, data: dict):
+        user_id = data.pop("user_id")
+        amount = data.pop("amount")
+
+        cls.transaction = Transaction.create(user_id=user_id, amount=amount)
+
+    @classmethod
+    def retrieve_transaction(cls, transaction_id: int, ret_obj: bool = False):
+        cls.transaction = Transaction.get_or_404(transaction_id)
+        if ret_obj: return cls.transaction
+
+        return {
+            "transaction_id": cls.transaction.id,
+            "user_id": cls.transaction.user_id,
+            "amount": cls.transaction.amount,
+            "is_paid": cls.transaction.is_paid,
+            "created_at": DateTime.string(cls.transaction.created_at),
+            "updated_at": DateTime.string(cls.transaction.updated_at),
+        }
 
 class UserService:
     user = None

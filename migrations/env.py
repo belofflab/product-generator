@@ -10,6 +10,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+from apps.core.models import FastModel
 from apps.sender.models import FastModel
 from apps.users.models import FastModel
 from apps.generator_base.models import FastModel
